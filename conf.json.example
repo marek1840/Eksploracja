@@ -1,0 +1,12 @@
+{
+  "test_call": "Eksploracja/data/splited/CALL_TYPE/test.csv",
+  "train_call": "Eksploracja/data/splited/CALL_TYPE/train.csv",
+  "model_call": "/data/models/call_model.plk",
+  "test_day": "/data/splited/DAY_TYPE/test.csv",
+  "train_day": "/data/splited/DAY_TYPE/train.csv",
+  "model_day": "/data/models/day_model.plk",
+  "train": "/data/train.csv",
+  "head": "/data/head.csv",
+  "window_size": 2,
+  "chunk_size": 200000
+}

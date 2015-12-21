@@ -31,21 +31,16 @@ def split_to_balanced_train_test(in_csv_file, out_dir):
 
         out_train_day = out_train_day.append(train)
         out_test_day = out_test_day.append(test)
-        # print f[(f.CALL_TYPE == val)]
-        # print f[(f.DAY_TYPE == val)]
-        # print f.filter(like="f['CALL_TYPE'] == 'B'")
 
-    # print out_test
-    # TODO save in file
     if not os.path.exists(os.path.join(out_dir, 'CALL_TYPE')):
         os.makedirs(os.path.join(out_dir, 'CALL_TYPE'))
-    out_test_call.to_csv(os.path.join(out_dir, 'CALL_TYPE', 'test.csv'))
-    out_train_call.to_csv(os.path.join(out_dir, 'CALL_TYPE', 'train.csv'))
+    out_test_call.to_csv(os.path.join(out_dir, 'CALL_TYPE', 'test.csv'), index=False)
+    out_train_call.to_csv(os.path.join(out_dir, 'CALL_TYPE', 'train.csv'), index=False)
 
     if not os.path.exists(os.path.join(out_dir, 'DAY_TYPE')):
         os.makedirs(os.path.join(out_dir, 'DAY_TYPE'))
-    out_test_day.to_csv(os.path.join(out_dir, 'DAY_TYPE', 'test.csv'))
-    out_train_day.to_csv(os.path.join(out_dir, 'DAY_TYPE', 'train.csv'))
+    out_test_day.to_csv(os.path.join(out_dir, 'DAY_TYPE', 'test.csv'), index=False)
+    out_train_day.to_csv(os.path.join(out_dir, 'DAY_TYPE', 'train.csv'), index=False)
 
 
 def distance_between_gps(lat0, lon0, lat1, lon1):
@@ -64,6 +59,6 @@ def distance_between_gps(lat0, lon0, lat1, lon1):
 
 if __name__ == "__main__":
     conf =ConfigHolder()
-    in_path = conf["train"]
+    in_path = conf["train_class"]
 
     split_to_balanced_train_test(in_path, "../data/splited")

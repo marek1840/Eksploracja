@@ -18,7 +18,7 @@ class CsvConverter(object):
         # df = pd.read_csv(open(infile))
         # print df.P
         x, y = self.get_raw_features_tensors(infile, int(self.config["window_size"]), int(self.config["chunk_size"]))
-        pass
+
 
     def get_raw_features_tensors(self, path, dir_out, window_size=100, chunk_size=20000, input_size=50, label_size=2):
 
@@ -76,34 +76,26 @@ class CsvConverter(object):
                         features = []
                         labels_lstm = []
                         part_number += 1
-                        #             break
-                        #     if current_chunck == 0:
-                        #         break
-                        # break
-                        # print(features)
 
 
-pass
+    def get_raw_test(self, path, out, window_size=100):
+        df = pd.read_csv(open(path))
+        features = []
+        for d, part_number in izip(df, count(0, 1)):
+            print(part_number)
+            for row in d.values:
+                CALL_TYPE = ord(row[3]) - ord('A')  # "CALL_TYPE"
+                DAY_TYPE = ord(row[8]) - ord('A')  # "DAY_TYPE"
+                l = eval(row[10])[window_size:]  # list of positions
+                vec = [CALL_TYPE, DAY_TYPE]
+                vec.extend([j for j in l])
+                features.append(vec)
 
 
-def get_raw_test(self, path, out, window_size=100):
-    df = pd.read_csv(open(path))
-    features = []
-    for d, part_number in izip(df, count(0, 1)):
-        print(part_number)
-        for row in d.values:
-            CALL_TYPE = ord(row[3]) - ord('A')  # "CALL_TYPE"
-            DAY_TYPE = ord(row[8]) - ord('A')  # "DAY_TYPE"
-            l = eval(row[10])[window_size:]  # list of positions
-            vec = [CALL_TYPE, DAY_TYPE]
-            vec.extend([j for j in l])
-            features.append(vec)
-
-
-def conver_dir(self, indir, outdir, suffix=True):
-    for path in listdir(indir):
-        self.convert_file(os.path.join(indir, path),
-                          os.path.join(outdir, path[:-4] + "converted.csv" if suffix else path))
+    def conver_dir(self, indir, outdir, suffix=True):
+        for path in listdir(indir):
+            self.convert_file(os.path.join(indir, path),
+                              os.path.join(outdir, path[:-4] + "converted.csv" if suffix else path))
 
 
 if __name__ == "__main__":

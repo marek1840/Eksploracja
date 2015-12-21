@@ -32,19 +32,41 @@ def distance_between_gps(lat0, lon0, lat1, lon1):
     return ret
 
 
-def create_network_model(input_size, out_size):
+def gps_loss(y_true, y_pred):
+    return distance_between_gps(y_true[0], y_true[1], y_pred[0], y_pred[1])
+
+
+def gps_evaluation(model, X, y):
+    predicted = model.predict(X)
+    print predicted
+    measure = map(lambda p, y: gps_loss(y, p), predicted, y)
+
+    print "Sum"
+    print sum(measure)
+    print "Avrage"
+    print sum(measure) / len(measure)
+
+
+def create_network_model(input_size, out_size, model_path=None):
     model = Sequential()
-    h1 = 512
+    h1 = 1024
     h2 = 512
     h3 = 512
-    model.add(LSTM(int(input_size), 128))
-    model.add(Dropout(0.5))
-    model.add(Dense(128, out_size))  # changes according to used dataset
+    model.add(LSTM(int(input_size), h1, return_sequences=True))
+    model.add(Dropout(0.2))
+    model.add(Dense(h1, h2))
+    # changes according to used dataset
+    # model.add(Activation('tanh'))
+    model.add(LSTM(h2, 128))
+    model.add(Dropout(0.2))
+    model.add(Dense(128, out_size))
     model.add(Activation('tanh'))
-    # model.load_weights('../data/lstm.hdf5')
-    # sgd = SGD(lr=0.01, momentum=0.9, decay=1.e-5, nesterov=True)
-    model.compile(loss='mse', optimizer='rmsprop')
-    # model.compile(loss='mse', optimizer=sgd)
+    if os.path.isfile(model_path):
+        model.load_weights(model_path)
+    sgd = SGD(lr=0.1, momentum=0.9, decay=1.e-5, nesterov=True)
+    # model.compile(loss='mse', optimizer='rmsprop')
+    model.compile(loss='mse', optimizer=sgd)
+    # model.compile(loss=gps_loss, optimizer=sgd)
     model.get_config(verbose=0)
 
     return model
@@ -64,32 +86,38 @@ def test_gen(x_dir, y_dir):
 
 if __name__ == "__main__":
     conf = ConfigHolder()
+    # TODO mean shift
 
     cc = CsvConverter()
 
-    batch_size = 4000
-    input_size = 50
+    batch_size = 128
+    input_size = 200
 
-    cc.get_raw_features_tensors(conf["test_call"], conf["test_call_chunks"],
-                                window_size=conf["window_size"],
-                                chunk_size=conf["chunk_size"],
-                                input_size=input_size,
-                                label_size=2)
+    # cc.get_raw_features_tensors(conf["test_call"], conf["test_call_chunks"],
+    #                             window_size=conf["window_size"],
+    #                             chunk_size=conf["chunk_size"],
+    #                             input_size=input_size,
+    #                             label_size=2)
     print "Converted"
 
     train_x_dir = os.path.join(conf["test_call_chunks"], "x")
     train_y_dir = os.path.join(conf["test_call_chunks"], "y")
-    model = create_network_model(input_size=6, out_size=2)
-    # print "Fitting model"#https://github.com/fchollet/keras/issues/85
-    for train_x, train_y in train_gen(train_x_dir, train_y_dir):
-        # print train_x.shape
-        # print train_y.shape
-        model.fit(train_x, train_y, batch_size=batch_size, nb_epoch=200)
+    model_path = conf["lstm_model"]
 
+    model = create_network_model(input_size=6, out_size=2, model_path=model_path)
+    # print "Fitting model"#https://github.com/fchollet/keras/issues/85
+    # for train_x, train_y in train_gen(train_x_dir, train_y_dir):
+    #     # print train_x.shape
+    #     # print train_y.shape
+    #     model.fit(train_x, train_y, batch_size=batch_size, nb_epoch=2)
+    #     break
+    model.save_weights(model_path, overwrite=True)
     for train_x, train_y in train_gen(train_x_dir, train_y_dir):
-        score = model.evaluate(train_x, train_y, show_accuracy=True, verbose=2)
-        print 'Train score: '
-        print score
+        # score = model.evaluate(train_x, train_y, show_accuracy=True, verbose=2)
+        # print 'Train score: '
+        # print score
+        print 'Train gps score'
+        print gps_evaluation(model, train_x, train_y)
 
     for test_x, test_y in test_gen(train_x_dir, train_y_dir):
         score = model.evaluate(test_x, test_y, show_accuracy=True, verbose=2)

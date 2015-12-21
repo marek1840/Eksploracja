@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.cluster import MeanShift
 
 from config.config_holder import ConfigHolder
+from statistical_classifier.loaders import clean_file
 
 
 class MeanShiftClf:
@@ -60,6 +61,7 @@ class MeanShiftClf:
 
 if __name__ == "__main__":
     conf = ConfigHolder()
+    clean_file(conf["train"], conf["train"])
     ms = MeanShiftClf()
     ms.get_clusters(conf["train"], cc_file=conf["mean_shift_cluster_centers"],
                     clf_file=conf["mean_shift_model"], arrivals_file=conf["arrivals"])

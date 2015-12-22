@@ -1,5 +1,4 @@
 import json
-import os
 
 
 class ConfigHolder(dict):
@@ -10,7 +9,7 @@ class ConfigHolder(dict):
             ConfigHolder.__instance = dict.__new__(cls)
         return ConfigHolder.__instance
 
-    def __init__(self, name=None,config_module_abs_path='../conf.json'):
+    def __init__(self, name=None, config_module_abs_path='conf.json'):
         with open(config_module_abs_path, 'r') as f:
             json_cfg = json.load(f)
         name = name or self.__class__.__name__.lower()

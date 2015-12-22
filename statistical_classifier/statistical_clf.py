@@ -70,7 +70,7 @@ if __name__ == "__main__":
     neighbours_size = xrange(1, 10)
 
     classifiers = [
-        SVC(),
+        # SVC(),
         RandomForestClassifier(n_jobs=-1),
         DecisionTreeClassifier(),
         AdaBoostClassifier(),
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ]
 
     names = [
-        'SVC',
+        # 'SVC',
         'RandomForest',
         'DecisionTree',
         'AdaBoost',

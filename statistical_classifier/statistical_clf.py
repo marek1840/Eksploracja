@@ -72,16 +72,16 @@ if __name__ == "__main__":
     classifiers = [
         # SVC(),
         #RandomForestClassifier(n_jobs=1,max_depth=25,max_leaf_nodes=20,max_features=10),
-        DecisionTreeClassifier(),
-        AdaBoostClassifier(),
+        # DecisionTreeClassifier(),
+        # AdaBoostClassifier(),
         GaussianNB()
     ]
 
     names = [
         # 'SVC',
         #'RandomForest',
-        'DecisionTree',
-        'AdaBoost',
+        # 'DecisionTree',
+        # 'AdaBoost',
         'NaiveBayes'
     ]
 

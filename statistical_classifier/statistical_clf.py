@@ -74,7 +74,7 @@ if __name__ == "__main__":
         #RandomForestClassifier(n_jobs=1,max_depth=25,max_leaf_nodes=20,max_features=10),
         # DecisionTreeClassifier(),
         # AdaBoostClassifier(),
-        GaussianNB()
+        # GaussianNB()
     ]
 
     names = [
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         #'RandomForest',
         # 'DecisionTree',
         # 'AdaBoost',
-        'NaiveBayes'
+        # 'NaiveBayes'
     ]
 
     classifiers.extend([KNeighborsClassifier(k) for k in neighbours_size])

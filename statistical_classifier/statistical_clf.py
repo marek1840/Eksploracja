@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     classifiers = [
         # SVC(),
-        RandomForestClassifier(n_jobs=-1),
+        RandomForestClassifier(n_jobs=1,max_depth=25,max_leaf_nodes=20,max_features=10),
         DecisionTreeClassifier(),
         AdaBoostClassifier(),
         GaussianNB()
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         'NaiveBayes'
     ]
 
-    classifiers.extend([KNeighborsClassifier(k, n_jobs=-1) for k in neighbours_size])
+    classifiers.extend([KNeighborsClassifier(k) for k in neighbours_size])
     names.extend(['KNN-%d' % k for k in neighbours_size])
 
     data = np.load(config["train_class_cleaned_npy"])

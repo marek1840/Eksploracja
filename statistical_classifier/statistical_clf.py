@@ -106,14 +106,19 @@ if __name__ == "__main__":
     for clf, name in zip(classifiers, names):
         print clf.__repr__()
         log_file.write(clf.__repr__())
-        scores = get_scores(clf, x_train, x_test, y_train, y_test, os.path.join(config["models_dir"], name + ".pkl"))
-        print '=================================================================='
-        log_file.write(get_printable_scores_str(scores))
-        log_file.write('==================================================================')
+        try:
+            scores = get_scores(clf, x_train, x_test, y_train, y_test, os.path.join(config["models_dir"], name + ".pkl"))
+            log_file.write(get_printable_scores_str(scores))
+            # log_file.write('==================================================================')
 
-        if scores['f1_score'] > best_avg_f1:
-            best_clf = clf
-            best_scores = scores
+            if scores['f1_score'] > best_avg_f1:
+                best_clf = clf
+                best_scores = scores
+        except MemoryError:
+            log_file.write("Memory error")
+            print "Memory error"
+        print '=================================================================='
+        log_file.write('==================================================================')
 
     print "Best classifier: %s" % best_clf.__repr__()
     get_printable_scores_str(best_scores)

@@ -10,5 +10,7 @@ routes = [e for e in df["POLYLINE"]]
 
 lengths = map(lambda seq: len(seq), routes)
 
-plt.hist(lengths, bins=[x for x in xrange(0, 250)])
+plt.hist(lengths, bins=[x for x in xrange(0, 5000)])
+plt.xlabel('Track length', fontsize=18)
+plt.ylabel('Number of trips', fontsize=16)
 plt.savefig('hist.png')

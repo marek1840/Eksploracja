@@ -51,7 +51,11 @@ class MeanShiftClf:
         df['CLASS'] = pd.Series(labels)
         # cut destination point (last in sequence) because it will give class explicite
         df['POLYLINE'] = df['POLYLINE'].apply(lambda x: x[:x.rfind('[') - 1] + "]" if len(x) > 0 else x)
+        df = df.sample(frac=0.7)
+        print len(df)
         df.to_csv(open(out_file, "w+"), index=False)
+
+
 
     def clean(self, conf):
         to_delete = [conf["mean_shift_cluster_centers"], conf["mean_shift_model"], conf["arrivals"]]
